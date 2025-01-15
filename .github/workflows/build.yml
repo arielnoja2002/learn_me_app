@@ -1,78 +1,42 @@
-name: Build Kivy APK
-
+name: CI
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      # Step 2: Set up Python environment
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      # used to cache dependencies with a timeout
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v2
         with:
-          python-version: '3.8'
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
 
-      # Step 3: Install dependencies for Buildozer
-      - name: Install Buildozer dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y \
-            python3-pip \
-            python3-setuptools \
-            python3-dev \
-            build-essential \
-            libssl-dev \
-            libffi-dev \
-            libsqlite3-dev \
-            libjpeg-dev \
-            liblcms2-dev \
-            libfreetype6-dev \
-            zlib1g-dev \
-            libpng-dev \
-            git \
-            openjdk-8-jdk \
-            android-sdk \
-            android-tools-adb \
-            android-tools-fastboot
-
-      # Step 4: Install Buildozer, Cython, and update Android SDK
-      - name: Install Buildozer, Cython, and update Android SDK
-        run: |
-          pip install buildozer
-          pip install cython
-          
-          # Install Android SDK command line tools if not already installed
-          mkdir -p $HOME/Android/Sdk
-          cd $HOME/Android/Sdk
-          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
-          unzip commandlinetools-linux-7583922_latest.zip
-          
-          # Install required Android SDK components
-          yes | $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk --licenses
-          $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk "platform-tools" "build-tools;29.0.2" "platforms;android-29" "tools"
-          
-          # Install AIDL
-          $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk "aidl"
-
-      # Step 5: Build APK with Buildozer
-      - name: Build APK
-        run: |
-          buildozer android debug
-
-      # Step 6: Upload APK as an artifact
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
+      - uses: actions/cache@v2
         with:
-          name: kivy-apk
-          path: ./bin/*.apk
+          path: .buildozer
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: master
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
