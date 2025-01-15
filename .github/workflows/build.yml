@@ -30,6 +30,10 @@ jobs:
           sudo apt install -y libncurses6  # Use libncurses6 as a replacement for libncurses5
           sudo apt install -y zlib1g  # Use zlib1g instead of zlib1g:i386
 
+          # Install Cython
+          pip install cython
+
+          # Upgrade pip and install buildozer
           pip install --upgrade pip
           pip install buildozer
 
