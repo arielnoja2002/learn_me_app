@@ -1,43 +1,64 @@
-name: CI
+name: Build Kivy APK
+
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      # Used to cache dependencies with a timeout
-      - name: Get Date
-        id: get-date
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      # Step 3: Install dependencies for Buildozer
+      - name: Install Buildozer dependencies
         run: |
-          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-        shell: bash
+          sudo apt update
+          sudo apt install -y \
+            python3-pip \
+            python3-setuptools \
+            python3-dev \
+            build-essential \
+            libssl-dev \
+            libffi-dev \
+            libsqlite3-dev \
+            libjpeg-dev \
+            liblcms2-dev \
+            libfreetype6-dev \
+            zlib1g-dev \
+            libpng-dev \
+            git \
+            openjdk-8-jdk \
+            android-sdk \
+            android-tools-adb \
+            android-tools-fastboot
 
-      - name: Cache Buildozer global directory
-        uses: actions/cache@v2
-        with:
-          path: .buildozer_global
-          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
+      # Step 4: Install Buildozer
+      - name: Install Buildozer
+        run: |
+          pip install buildozer
 
-      - name: Cache Buildozer directory
-        uses: actions/cache@v2
-        with:
-          path: .buildozer
-          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+      # Step 5: Build APK with Buildozer
+      - name: Build APK
+        run: |
+          buildozer android debug
 
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
-
-      - name: Upload artifacts
+      # Step 6: Upload APK as an artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: package
-          path: ${{ steps.buildozer.outputs.filename }}
+          name: kivy-apk
+          path: ./bin/*.apk
