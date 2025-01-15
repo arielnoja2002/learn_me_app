@@ -1,119 +1,48 @@
-name: Build Android App
+name: Build APK
+
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - main  # Trigger the workflow on push to the main branch
   pull_request:
-    branches: [ main, master ]
+    branches:
+      - main  # Trigger the workflow on pull requests to the main branch
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # The runner to use (Ubuntu)
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3  # Updated to v3
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.9'
+        python-version: '3.8'  # Use Python 3.8
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'temurin'
-        java-version: '11'
-
-    - name: Install system dependencies
+    - name: Install Buildozer dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          python3-pip \
-          build-essential \
-          git \
-          python3 \
-          python3-dev \
-          ffmpeg \
-          autoconf \
-          libtool \
-          pkg-config \
-          zlib1g-dev \
-          libncurses5-dev \
-          libncursesw5-dev \
-          libtinfo6 \  # Change from libtinfo5 to libtinfo6
-          cmake \
-          wget \
-          unzip \
-          openjdk-11-jdk
+        sudo apt update
+        sudo apt install -y python3-pip python3-setuptools python3-dev build-essential git
+        pip install --upgrade pip
+        pip install buildozer
+        pip install cython  # Install Cython explicitly
 
-    - name: Setup Android SDK
+    - name: Install Android SDK and NDK
       run: |
-        mkdir -p android-sdk
-        cd android-sdk
-        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
-        unzip commandlinetools-linux-*_latest.zip
-        mkdir -p cmdline-tools/latest
-        mv cmdline-tools/* cmdline-tools/latest/ || true
-        rm commandlinetools-linux-*_latest.zip
-        cd ..
-        echo "ANDROID_HOME=$GITHUB_WORKSPACE/android-sdk" >> $GITHUB_ENV
-        echo "$GITHUB_WORKSPACE/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-        echo "$GITHUB_WORKSPACE/android-sdk/platform-tools" >> $GITHUB_PATH
+        sudo apt-get install -y openjdk-8-jdk
+        sudo apt-get install -y android-sdk
+        sudo apt-get install -y android-ndk
+        # Accept licenses for Android SDK and NDK (AIDL, etc.)
+        yes | sdkmanager --licenses
 
-    - name: Install Android SDK components and AIDL
+    - name: Build APK using Buildozer
       run: |
-        yes | sdkmanager --licenses || true
-        sdkmanager --install \
-          "platform-tools" \
-          "platforms;android-33" \
-          "build-tools;33.0.0" \
-          "ndk;25.2.9519653" \
-          "cmake;3.22.1" \
-          "extras;android;m2repository" \
-          "extras;google;m2repository" \
-          "build-tools;30.0.3" \
-          "build-tools;33.0.2"
-        
-        # Additional AIDL-specific setup
-        mkdir -p $ANDROID_HOME/build-tools/33.0.0/framework
-        touch $ANDROID_HOME/build-tools/33.0.0/framework/aidl
-        chmod +x $ANDROID_HOME/build-tools/33.0.0/aidl
+        buildozer -v android debug
 
-    - name: Install Buildozer
-      run: |
-        python -m pip install --upgrade pip
-        pip install buildozer Cython==0.29.33
-
-    - name: Create buildozer.spec if not exists
-      run: |
-        if [ ! -f buildozer.spec ]; then
-          buildozer init
-        fi
-
-    - name: Update Buildozer configuration
-      run: |
-        cat > buildozer.spec << EOF
-        [app]
-        title = MyApp
-        package.name = myapp
-        package.domain = org.example
-        source.include_exts = py,png,jpg,kv,atlas
-        version = 0.1
-        android.permissions = INTERNET
-        EOF
-
-    - name: Clean Buildozer
-      run: |
-        rm -rf ~/.buildozer/
-        rm -rf .buildozer/
-
-    - name: Build Android APK
-      run: |
-        set -e  # Exit on error
-        export PATH=$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/33.0.0:$PATH
-        buildozer android debug || { echo 'Build failed'; exit 1; }
-
-    - name: Upload APK artifact
+    - name: Upload APK as artifact
       uses: actions/upload-artifact@v3
       with:
-        name: app-debug
-        path: bin/*.apk
+        name: my-kivy-app-apk
+        path: bin/*.apk  # Path to the generated APK
