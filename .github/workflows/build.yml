@@ -39,7 +39,7 @@ jobs:
         id: buildozer
         with:
           command: buildozer android debug
-          buildozer_version: master  # You can specify a version here if needed
+          buildozer_version: v1.0.0  # Specify a stable version
 
       # Step 6: Upload APK artifacts
       - name: Upload APK
