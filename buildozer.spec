@@ -37,7 +37,7 @@ requirements = python3,kivy==2.2.1,pillow==10.0.0,sdl2_ttf==2.0.15,sdl2_image==2
 garden_requirements =
 
 # (str) Presplash of the application - using the same icon.jpg for presplash
-presplash.filename = %(source.dir)s/icon.jpg
+#presplash.filename = %(source.dir)s/icon.jpg
 
 # (str) Icon of the application
 icon.filename = %(source.dir)s/icon.jpg
