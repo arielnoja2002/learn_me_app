@@ -1,0 +1,540 @@
+<SplashScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'data/images/splash.png'
+            
+    BoxLayout:
+        orientation: 'vertical'
+        size: root.width, root.height
+        padding: '20dp'
+        spacing: '15dp'
+        
+        Widget:
+            size_hint_y: 0.85  # Space at top
+            
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.15  # Bottom section for progress
+            spacing: '10dp'
+            
+            ProgressBar:
+                size_hint_y: None
+                height: '10dp'
+                size_hint_x: 0.8
+                pos_hint: {'center_x': 0.5}
+                max: 1
+                value: root.progress
+
+                canvas:
+                    Color:
+                        rgb: 1, 0.5, 0  # Bright orange
+                    RoundedRectangle:
+                        pos: self.pos  # Match position
+                        size: (self.width * self.value_normalized, self.height)  # Adjust size for progress
+                        radius: [self.height / 2]  # Match radius
+            
+            Label:
+                text: 'Loading Please Wait...'
+                size_hint_y: None
+                height: '20dp'
+                font_size: '14sp'
+                color: 1, 0.5, 0, 1  # Changed to match progress bar's bright orange color
+
+<DashboardScreen>:
+    RelativeLayout:
+        id: dashboard_background
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: 'data/images/dashboard.png'
+            
+    BoxLayout:
+        orientation: 'vertical'
+        
+        # Top Navigation Bar
+        BoxLayout:
+            size_hint_y: 0.08
+            padding: '10dp'
+            
+            # Left space (can be used for logo or title)
+            Widget:
+                size_hint_x: 0.15
+            
+            # Center space
+            Widget:
+                size_hint_x: 0.7
+            
+            # Menu button on right
+            AnchorLayout:
+                size_hint_x: 0.15
+                anchor_x: 'right'
+                anchor_y: 'center'
+                
+                Button:
+                    size_hint: None, None
+                    size: '40dp', '40dp'
+                    background_normal: 'data/images/menu_normal.png'
+                    background_down: 'data/images/menu_down.png'
+                    background_color: 1, 1, 1, 1
+                    on_press: app.play_click_sound()
+                    on_release: root.switch_screen('menu')
+        
+        # Main Content Area
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.84
+            padding: '20dp'
+            
+            # Content Area with semi-transparent background
+            BoxLayout:
+                id: content_area
+                size_hint: 1, 1                
+
+        # Bottom Navigation Bar with Next and Previous Buttons
+        BoxLayout:
+            size_hint_y: 0.08
+            padding: '10dp'
+            spacing: '20dp'
+            
+            Button:
+                text: "Previous"
+                size_hint_x: 0.3
+                background_color: (0.2, 0.6, 0.8, 1)  # Blue color
+                on_press: app.play_click_sound()
+                on_press: root.navigate_screen('previous')
+            
+            Button:
+                text: "Next"
+                size_hint_x: 0.3
+                background_color: (0.8, 0.2, 0.2, 1)  # Red color
+                on_press: app.play_click_sound()
+                on_press: root.navigate_screen('next')
+                
+# ------------------------------------------------------------------------------------------
+                
+<LetterOfTruth>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Semi-transparent white
+        Rectangle:
+            size: self.size
+            source: 'data/images/book_shelf.png'
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: None, None
+        size: '300dp', '400dp'
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        spacing: 100
+        padding: [88, 0, 0, 30]
+        
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: '240dp', '70dp'
+            spacing: 60
+            padding: [0, 0, 0, 25]
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)                                                                                                                                    
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: '240dp', '70dp'
+            spacing: 60
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)
+                
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: '240dp', '70dp'
+            spacing: 60
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: None, None
+            size: '240dp', '70dp'
+            spacing: 60
+            padding: [0, 0, 0, 10]
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)
+            Button:
+                background_normal: 'data/images/close_chest.png'
+                background_down: 'data/images/close_chest_down.png'
+                on_release: app.play_chest_sound()
+                on_press: app.show_random_letter()
+                on_release: root.shake_chest(self)
+                
+<RandomLetter>:
+    auto_dismiss: False
+
+    RelativeLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White background
+            Rectangle:
+                size: 800, 1000
+                pos: self.center_x - 400, self.center_y - 500
+                source: 'data/images/random_letter.png'
+
+        Label:
+            text: app.displayed_label  # Bind to the Python property
+            font_size: '60sp'
+            pos_hint: {'center_x': 0.48, 'center_y': 0.63}
+            color: 169/255, 115/255, 81/255, 1
+            bold: True
+            on_touch_down: app.chest_label_sound()
+
+        Button:
+            size_hint: None, None
+            size: 200, 150
+            pos_hint: {"center_x": 0.5, "y": 0.1}
+            background_normal: 'data/images/random_next.png'
+            background_down: 'data/images/random_next.png'
+            on_press: app.save_current_data_to_json()
+            on_press: root.play_random_sounds()
+            on_release: root.dismiss()
+            
+<ParrotMessage>:
+    auto_dismiss: False
+
+    RelativeLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # White background
+            Rectangle:
+                size: 800, 1000
+                pos: self.center_x - 400, self.center_y - 500
+                source: 'data/images/chest_unlock_all.png'
+                
+        Button:
+            size_hint: None, None
+            size: 200, 150
+            pos_hint: {"center_x": 0.5, "y": 0.1}
+            background_normal: 'data/images/chest_continue.png'
+            background_down: 'data/images/chest_continue.png'
+            on_press: app.save_current_data_to_json()
+            on_release: root.dismiss()
+            
+# ------------------------------------------------------------------------------------------  
+            
+<AdventureAcademy>:
+    RelativeLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # Semi-transparent white
+            Rectangle:
+                size: 800, 1000
+                pos: self.center_x - 420, self.center_y - 700
+                source: 'data/images/black_board.png'
+
+        Image:
+            id: centered_image
+            size_hint: None, None
+            size: 400, 400
+            keep_ratio: False
+            allow_stretch: True
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Center the image higher
+
+        GridLayout:
+            cols: 2
+            size_hint: None, None
+            size: self.minimum_size  # Size matches the content
+            pos_hint: {"center_x": 0.5, "center_y": 0.2}  # Center below the image
+            spacing: 20  # Space between buttons
+
+            Button:
+                id: option_button_0
+                size_hint: None, None
+                size: 150, 150  # Adjust button size
+                on_press: root.on_option_button_click(self)
+
+            Button:
+                id: option_button_1
+                size_hint: None, None
+                size: 150, 150  # Adjust button size
+                on_press: root.on_option_button_click(self)
+
+            Button:
+                id: option_button_2
+                size_hint: None, None
+                size: 150, 150  # Adjust button size
+                on_press: root.on_option_button_click(self)
+
+            Button:
+                id: option_button_3
+                size_hint: None, None
+                size: 150, 150  # Adjust button size
+                on_press: root.on_option_button_click(self)
+              
+<PlayGround>:
+    #RelativeLayout:
+        #canvas.before:
+            #Color:
+                #rgba: 1, 1, 1, 1  # Semi-transparent white
+            #Rectangle:
+                #size: 800, 1200
+                #pos: self.center_x - 420, self.center_y - 750
+                #source: 'data/images/tv.png'
+                
+<MenuModal>:
+    size_hint: 0.8, 0.8
+    background_color: 0, 0, 0, 0
+    auto_dismiss: False
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    
+    FloatLayout:
+        # Background wooden board
+        Image:
+            source: 'data/images/menu_modal.png'
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        
+        # Menu content
+        FloatLayout:
+            size_hint: 0.75, 0.75
+            pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+            
+            # Setting button
+            Image:
+                source: 'data/images/setting.png'
+                size_hint: None, None
+                size: '150dp', '150dp'
+                pos_hint: {'center_x': 0.22, 'center_y': 0.70}  # Adjust position as needed
+            
+            # Volume Control Button
+            Button:
+                size_hint: None, None
+                size: '180dp', '50dp'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.58}  # Adjust position as needed
+                background_normal: 'data/images/volume_control_normal.png'
+                background_down: 'data/images/volume_control_down.png'
+                on_press: app.play_click_sound()
+                on_release: app.root.get_screen('dashboard').open_volume_control()
+            
+            # Terms and Privacy Button
+            Button:
+                size_hint: None, None
+                size: '180dp', '50dp'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.43}
+                background_normal: 'data/images/terms_privacy_normal.png'
+                background_down: 'data/images/terms_privacy_down.png'
+                on_press: app.play_click_sound()
+                on_release: app.root.current_screen.open_terms_modal()
+            
+            # Credits Button
+            Button:
+                size_hint: None, None
+                size: '180dp', '50dp'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.28}  # Adjust position as needed
+                background_normal: 'data/images/credits_normal.png'
+                background_down: 'data/images/credits_down.png'
+                on_press: app.play_click_sound()
+                on_release: app.root.get_screen('dashboard').open_credits_modal()
+            
+            # Quit Button
+            Button:
+                size_hint: None, None
+                size: '125dp', '45dp'
+                pos_hint: {'center_x': 0.5, 'center_y': 0.16}  # Adjust position as needed
+                background_normal: 'data/images/quit_normal.png'
+                background_down: 'data/images/quit_down.png'
+                on_release: app.show_quit_confirmation()
+                
+            Button:
+                size_hint: None, None
+                size: '60dp', '50dp'
+                pos_hint: {'center_x': 0.87, 'center_y': 0.7}
+                background_normal: 'data/images/back_normal.png'
+                background_down: 'data/images/back_down.png'
+                on_press: app.play_close_sound()
+                on_release: root.dismiss()
+
+<TermsModal>:
+    FloatLayout:
+        # Center the image
+        Image:
+            source: 'data/images/terms_privacy.png'
+            size: self.size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.54}  # Center the image in the modal
+
+        Label:
+            text: 'Terms and Privacy'
+            font_size: '24sp'
+            pos_hint: {'center_x': 0.7, 'center_y': 0.78}
+            bold: True
+            halign: 'left'
+            text_size: self.size
+            valign: 'middle'
+            color: (0.396, 0.051, 0.0, 1)
+            
+        # Close Button
+        Button:
+            text: "[u]Close[/u]"  # Underlined text
+            size_hint: None, None
+            size: '100dp', '40dp'
+            pos_hint: {'center_x': 0.67, 'y': 0.23}
+            background_color: 0, 0, 0, 0  # No background
+            font_size: '18sp'
+            color: (0.72, 0.53, 0.04, 1)  # Dark golden color for text
+            markup: True  # Enable text markup for styling
+            on_press: app.play_close_sound()
+            on_release: root.dismiss()  # Close the modal when clicked
+            
+<CreditsModal>:
+    FloatLayout:
+        # Center the image
+        Image:
+            source: 'data/images/terms_privacy.png'
+            size: self.size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.54}  # Center the image in the modal
+
+        Label:
+            text: 'Credits'
+            font_size: '24sp'
+            pos_hint: {'center_x': 0.88, 'center_y': 0.78}
+            bold: True
+            halign: 'left'
+            text_size: self.size
+            valign: 'middle'
+            color: (0.396, 0.051, 0.0, 1)
+            
+        # Close Button
+        Button:
+            text: "[u]Close[/u]"  # Underlined text
+            size_hint: None, None
+            size: '100dp', '40dp'
+            pos_hint: {'center_x': 0.67, 'y': 0.23}
+            background_color: 0, 0, 0, 0  # No background
+            font_size: '18sp'
+            color: (0.72, 0.53, 0.04, 1)  # Dark golden color for text
+            markup: True  # Enable text markup for styling
+            on_press: app.play_close_sound()
+            on_release: root.dismiss()  # Close the modal when clicked                       
+            
+<VolumeControl>:
+    FloatLayout:
+        # Center the image
+        Image:
+            source: 'data/images/volume_control.png'
+            size: self.size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.54}  # Center the image in the modal
+        
+        Label:
+            id: BGM
+            size_hint: None, None
+            size: '140dp', '70dp'
+            pos_hint: {'center_x': 0.46, 'y': 0.34}
+            text: f"{app.bgm_volume:.1f}%"  # Dynamically update text based on bgm_volume
+            color: (0.72, 0.53, 0.04, 1)
+            
+        Label:
+            id: SFX
+            size_hint: None, None
+            size: '140dp', '70dp'
+            pos_hint: {'center_x': 0.73, 'y': 0.34}
+            text: f"{app.sfx_volume:.1f}%"  # Dynamically update text based on sfx_volume
+            color: (0.72, 0.53, 0.04, 1)
+
+        Slider:
+            size_hint: None, None
+            size: '140dp', '50dp'
+            pos_hint: {'center_x': 0.63, 'y': 0.58}
+            value_track: True
+            value_track_color: 0.5176, 0.3373, 0.3373, 0.6
+            cursor_image: 'data/images/slider_cursor.png'
+            min: 0
+            max: 100
+            value: app.bgm_volume  # Bind the slider value to bgm_volume
+            on_value: app.adjust_volume_bgm(self.value)
+            
+        Slider:
+            size_hint: None, None
+            size: '140dp', '50dp'
+            pos_hint: {'center_x': 0.63, 'y': 0.49}
+            value_track: True
+            value_track_color: 0.5176, 0.3373, 0.3373, 0.6
+            cursor_image: 'data/images/slider_cursor.png'
+            min: 0
+            max: 100
+            value: app.sfx_volume  # Bind the slider value to sfx_volume
+            on_value: app.adjust_volume_sfx(self.value)
+           
+        # Close Button
+        Button:
+            text: "[u]Close[/u]"  # Underlined text
+            size_hint: None, None
+            size: '100dp', '40dp'
+            pos_hint: {'center_x': 0.66, 'y': 0.25}
+            background_color: 0, 0, 0, 0  # No background
+            font_size: '18sp'
+            color: (0.72, 0.53, 0.04, 1)  # Dark golden color for text
+            markup: True  # Enable text markup for styling
+            on_press: app.play_close_sound()
+            on_release: root.dismiss()  # Close the modal when clicked.
+            
+<QuitConfirmationModal>:
+    FloatLayout:
+        # Center the image
+        Image:
+            source: 'data/images/confirm_quit.png'  # Path to the background image
+            size: self.size
+            pos_hint: {'center_x': 0.5, 'center_y': 0.56}  # Center the image in the modal
+
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 130        
+        size_hint: None, None
+        size: '150dp', '45dp'
+
+        # Yes button with image background
+        Button:
+            background_normal: 'data/images/exit_confirm.png'  # Path to normal image for the button
+            background_down: 'data/images/exit_confirm_down.png'  # Path to the pressed image for the button
+            on_release: app.stop()  # Quit the app when pressed
+
+        # No button with image background
+        Button:
+            background_normal: 'data/images/exit_cancel.png'  # Path to normal image for the button
+            background_down: 'data/images/exit_cancel_down.png'  # Path to the pressed image for the button
+            on_release: root.dismiss()  # Close the modal without quitting

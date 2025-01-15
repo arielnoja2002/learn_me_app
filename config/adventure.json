@@ -1,0 +1,109 @@
+{
+    "animals": [
+        {
+            "image": "rat.png",
+            "image_sound": "rat.mp3",
+            "option": ["r.png", "d.png", "m.png", "b.png"],
+            "option_sound": ["r.mp3", "d.mp3", "m.mp3", "b.mp3"],
+            "correct_answer": "r.png"
+        },
+        {
+            "image": "dog.png",
+            "image_sound": "dog.mp3",
+            "option": ["m.png", "r.png", "d.png", "b.png"],
+            "option_sound": ["m.mp3", "r.mp3", "d.mp3", "b.mp3"],
+            "correct_answer": "d.png"
+        },
+        {
+            "image": "monkey.png",
+            "image_sound": "monkey.mp3",
+            "option": ["b.png", "d.png", "r.png", "m.png"],
+            "option_sound": ["b.mp3", "d.mp3", "r.mp3", "m.mp3"],
+            "correct_answer": "m.png"
+        },
+        {
+            "image": "bear.png",
+            "image_sound": "bear.mp3",
+            "option": ["b.png", "d.png", "m.png", "r.png"],
+            "option_sound": ["b.mp3", "d.mp3", "m.mp3", "r.mp3"],
+            "correct_answer": "b.png"
+        },
+        {
+            "image": "parrot.png",
+            "image_sound": "parrot.mp3",
+            "option": ["g.png", "f.png", "p.png", "w.png"],
+            "option_sound": ["g.mp3", "f.mp3", "p.mp3", "w.mp3"],
+            "correct_answer": "p.png"
+        },
+        {
+            "image": "frog.png",
+            "image_sound": "frog.mp3",
+            "option": ["f.png", "p.png", "w.png", "g.png"],
+            "option_sound": ["f.mp3", "p.mp3", "w.mp3", "g.mp3"],
+            "correct_answer": "f.png"
+        },
+        {
+            "image": "goat.png",
+            "image_sound": "goat.mp3",
+            "option": ["p.png", "f.png", "g.png", "w.png"],
+            "option_sound": ["p.mp3", "f.mp3", "g.mp3", "w.mp3"],
+            "correct_answer": "g.png" 
+        },
+        {
+            "image": "whale.png",
+            "image_sound": "whale.mp3",
+            "option": ["q.png", "w.png", "u.png", "n.png"],
+            "option_sound": ["q.mp3", "w.mp3", "u.mp3", "n.mp3"],
+            "correct_answer": "w.png"
+        },
+        {
+            "image": "queen_bee.png",
+            "image_sound": "queen_bee.mp3",
+            "option": ["n.png", "w.png", "u.png", "q.png"],
+            "option_sound": ["n.mp3", "w.mp3", "u.mp3", "q.mp3"],
+            "correct_answer": "q.png"
+        },
+        {
+            "image": "unicorn.png",
+            "image_sound": "unicorn.mp3",
+            "option": ["w.png", "q.png", "u.png", "n.png"],
+            "option_sound": ["w.mp3", "q.mp3", "u.mp3", "n.mp3"],
+            "correct_answer": "u.png"
+        },
+        {
+            "image": "narwhal.png",
+            "image_sound": "narwhal.mp3",
+            "option": ["n.png", "j.png", "k.png", "v.png"],
+            "option_sound": ["n.mp3", "j.mp3", "k.mp3", "v.mp3"],
+            "correct_answer": "n.png"
+        },
+        {
+            "image": "jellyfish.png",
+            "image_sound": "jellyfish.mp3",
+            "option": ["n.png", "j.png", "k.png", "v.png"],
+            "option_sound": ["n.mp3", "j.mp3", "k.mp3", "v.mp3"],
+            "correct_answer": "j.png"
+        },
+        {
+            "image": "koala.png",
+            "image_sound": "koala.mp3",
+            "option": ["v.png", "j.png", "n.png", "k.png"],
+            "option_sound": ["v.mp3", "j.mp3", "n.mp3", "k.mp3"],
+            "correct_answer": "k.png"
+        },
+        {
+            "image": "vampire_bat.png",
+            "image_sound": "vampire_bat.mp3",
+            "option": ["v.png", "k.png", "j.png", "y.png"],
+            "option_sound": ["v.mp3", "k.mp3", "j.mp3", "y.mp3"],
+            "correct_answer": "v.png"
+        },
+        {
+            "image": "yak.png",
+            "image_sound": "yak.mp3",
+            "option": ["j.png", "v.png", "k.png", "y.png"],
+            "option_sound": ["j.mp3", "v.mp3", "k.mp3", "y.mp3"],
+            "correct_answer": "y.png"
+        }
+    ]
+}

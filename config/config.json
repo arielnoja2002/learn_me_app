@@ -1,0 +1,118 @@
+{
+    "random_letters": [
+        {
+            "label": "R",
+            "audiofx": "Rr.mp3"
+        },
+        {
+            "label": "D",
+            "audiofx": "Dd.mp3"
+        },
+        {
+            "label": "M",
+            "audiofx": "Mm.mp3"
+        },
+        {
+            "label": "B",
+            "audiofx": "Bb.mp3"
+        },
+        {
+            "label": "P",
+            "audiofx": "Pp.mp3"
+        },
+        {
+            "label": "F",
+            "audiofx": "Ff.mp3"
+        },
+        {
+            "label": "G",
+            "audiofx": "Gg.mp3"
+        },
+        {
+            "label": "W",
+            "audiofx": "Ww.mp3"
+        },
+        {
+            "label": "Q",
+            "audiofx": "Qq.mp3"
+        },
+        {
+            "label": "U",
+            "audiofx": "Uu.mp3"
+        },
+        {
+            "label": "N",
+            "audiofx": "Nn.mp3"
+        },
+        {
+            "label": "J",
+            "audiofx": "Jj.mp3"
+        },
+        {
+            "label": "K",
+            "audiofx": "Kk.mp3"
+        },
+        {
+            "label": "V",
+            "audiofx": "Vv.mp3"
+        },
+        {
+            "label": "Y",
+            "audiofx": "Yy.mp3"
+        }
+    ],
+    "current_data": [
+        {
+            "label": "R",
+            "audiofx": "Rr.mp3"
+        },
+        {
+            "label": "M",
+            "audiofx": "Mm.mp3"
+        },
+        {
+            "label": "B",
+            "audiofx": "Bb.mp3"
+        },
+        {
+            "label": "P",
+            "audiofx": "Pp.mp3"
+        },
+        {
+            "label": "F",
+            "audiofx": "Ff.mp3"
+        },
+        {
+            "label": "G",
+            "audiofx": "Gg.mp3"
+        },
+        {
+            "label": "W",
+            "audiofx": "Ww.mp3"
+        },
+        {
+            "label": "Q",
+            "audiofx": "Qq.mp3"
+        },
+        {
+            "label": "U",
+            "audiofx": "Uu.mp3"
+        },
+        {
+            "label": "N",
+            "audiofx": "Nn.mp3"
+        },
+        {
+            "label": "J",
+            "audiofx": "Jj.mp3"
+        },
+        {
+            "label": "K",
+            "audiofx": "Kk.mp3"
+        },
+        {
+            "label": "Y",
+            "audiofx": "Yy.mp3"
+        }
+    ]
+}
