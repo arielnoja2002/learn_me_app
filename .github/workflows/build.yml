@@ -25,10 +25,23 @@ jobs:
           sudo apt install -y openjdk-8-jdk
           sudo apt install -y libstdc++6 libssl-dev
           sudo apt install -y libffi-dev liblzma-dev
-          
-          # Install alternatives for missing packages
-          sudo apt install -y libncurses6  # Use libncurses6 as a replacement for libncurses5
-          sudo apt install -y zlib1g  # Use zlib1g instead of zlib1g:i386
+          sudo apt install -y libncurses6 zlib1g
+
+          # Install Android SDK and required tools (including AIDL)
+          sudo apt install -y wget unzip
+          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+          unzip commandlinetools-linux-7583922_latest.zip -d $HOME/Android
+          rm commandlinetools-linux-7583922_latest.zip
+
+          # Set up Android SDK
+          export ANDROID_HOME=$HOME/Android
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+
+          # Accept Android SDK licenses
+          yes | sdkmanager --licenses
+
+          # Install required Android SDK components
+          sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-29" "system-images;android-29;google_apis;x86_64"
 
           # Install Cython
           pip install cython
