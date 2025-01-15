@@ -57,8 +57,13 @@ jobs:
           cd $HOME/Android/Sdk
           wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
           unzip commandlinetools-linux-7583922_latest.zip
+          
+          # Install required Android SDK components
           yes | $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk --licenses
-          $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk "platform-tools" "build-tools;29.0.2" "platforms;android-29" "system-images;android-29;google_apis;x86_64" "tools" "aidl"
+          $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk "platform-tools" "build-tools;29.0.2" "platforms;android-29" "tools"
+          
+          # Install AIDL
+          $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk "aidl"
 
       # Step 5: Build APK with Buildozer
       - name: Build APK
