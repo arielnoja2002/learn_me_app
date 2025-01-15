@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Latest version of checkout action
 
       - name: Set up Python environment
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4  # Latest version of setup-python action
         with:
           python-version: '3.8'
 
@@ -33,7 +33,7 @@ jobs:
           buildozer android debug
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # Latest version of upload-artifact action
         with:
           name: my-apk
           path: bin/*.apk
