@@ -33,9 +33,14 @@ jobs:
       run: |
         sudo apt-get install -y openjdk-8-jdk
         sudo apt-get install -y android-sdk
-        sudo apt-get install -y android-ndk
-        # Accept licenses for Android SDK and NDK (AIDL, etc.)
-        yes | sdkmanager --licenses
+        # Install SDK Manager and accept licenses
+        sudo apt-get install -y unzip
+        wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+        unzip commandlinetools-linux-7583922_latest.zip -d $HOME/android-sdk
+        export ANDROID_SDK_ROOT=$HOME/android-sdk
+        yes | $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager --licenses
+        # Install Android NDK
+        yes | $ANDROID_SDK_ROOT/cmdline-tools/bin/sdkmanager "ndk;21.3.6528147"  # You can specify a different version if needed
 
     - name: Build APK using Buildozer
       run: |
