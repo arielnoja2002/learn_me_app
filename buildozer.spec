@@ -49,10 +49,10 @@ orientation = portrait
 fullscreen = 1
 
 # (int) Target Android API, should be as high as possible.
-android.api = 33
+#android.api = 33
 
 # (int) Minimum API required
-android.minapi = 21
+#android.minapi = 21
 
 # (int) Android SDK version to use
 android.sdk = 33
