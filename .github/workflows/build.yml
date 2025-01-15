@@ -46,10 +46,11 @@ jobs:
             android-tools-adb \
             android-tools-fastboot
 
-      # Step 4: Install Buildozer
-      - name: Install Buildozer
+      # Step 4: Install Buildozer and Cython
+      - name: Install Buildozer and Cython
         run: |
           pip install buildozer
+          pip install cython
 
       # Step 5: Build APK with Buildozer
       - name: Build APK
