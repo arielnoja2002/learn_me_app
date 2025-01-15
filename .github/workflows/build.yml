@@ -1,3 +1,4 @@
+
 name: Build Android App
 on:
   push:
@@ -68,7 +69,13 @@ jobs:
         pip install buildozer
         pip install Cython==0.29.33
 
-    - name: Install Android SDK & NDK
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Setup Android SDK
       run: |
         sudo apt-get install -y wget unzip
         wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
@@ -76,12 +83,31 @@ jobs:
         mkdir -p android-sdk/cmdline-tools
         mv cmdline-tools android-sdk/cmdline-tools/latest
         rm commandlinetools-linux-*_latest.zip
-        echo "ANDROID_HOME=$GITHUB_WORKSPACE/android-sdk" >> $GITHUB_ENV
-        echo "$GITHUB_WORKSPACE/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+        export ANDROID_HOME=$GITHUB_WORKSPACE/android-sdk
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+        echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
         
-    - name: Accept Android SDK licenses
-      run: yes | sdkmanager --licenses
-
+    - name: Install Android SDK components
+      run: |
+        yes | sdkmanager --licenses
+        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.2.9519653"
+        sdkmanager "cmake;3.22.1"
+        sdkmanager "extras;android;m2repository"
+        sdkmanager "extras;google;m2repository"
+        
+    - name: Update Buildozer defaults
+      run: |
+        sed -i 's/android.ndk =.*/android.ndk = 25.2.9519653/g' buildozer.spec
+        sed -i 's/android.sdk =.*/android.sdk = 33/g' buildozer.spec
+        sed -i 's/android.build_tools =.*/android.build_tools = 33.0.0/g' buildozer.spec
+        
+    - name: Clean Buildozer cache
+      run: |
+        rm -rf ~/.buildozer/
+        rm -rf .buildozer/
+        
     - name: Build Android APK
       run: |
         buildozer android debug
@@ -103,4 +129,3 @@ jobs:
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        
