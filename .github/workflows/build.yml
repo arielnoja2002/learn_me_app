@@ -1,61 +1,111 @@
-name: Build Kivy APK
-
-on:
-  push:
-    branches:
-      - main
+name: Build Kivy App
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3  # Latest version of checkout action
+    - uses: actions/checkout@v3
 
-      - name: Set up Python environment
-        uses: actions/setup-python@v4  # Latest version of setup-python action
-        with:
-          python-version: '3.8'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y python3-pip build-essential git
-          sudo apt install -y openjdk-8-jdk
-          sudo apt install -y libstdc++6 libssl-dev
-          sudo apt install -y libffi-dev liblzma-dev
-          sudo apt install -y libncurses6 zlib1g
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '11'
 
-          # Install Android SDK and required tools (including AIDL)
-          sudo apt install -y wget unzip
-          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
-          unzip commandlinetools-linux-7583922_latest.zip -d $HOME/Android
-          rm commandlinetools-linux-7583922_latest.zip
+    - name: Cache Buildozer global directory
+      uses: actions/cache@v3
+      with:
+        path: .buildozer_global
+        key: buildozer-global-${{ hashFiles('buildozer.spec') }}
 
-          # Set up Android SDK
-          export ANDROID_HOME=$HOME/Android
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+    - name: Install Linux dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          python3-pip \
+          build-essential \
+          git \
+          python3 \
+          python3-dev \
+          ffmpeg \
+          libsdl2-dev \
+          libsdl2-image-dev \
+          libsdl2-mixer-dev \
+          libsdl2-ttf-dev \
+          libportmidi-dev \
+          libswscale-dev \
+          libavformat-dev \
+          libavcodec-dev \
+          zlib1g-dev \
+          libgstreamer1.0 \
+          gstreamer1.0-plugins-base \
+          gstreamer1.0-plugins-good
 
-          # Accept Android SDK licenses
-          yes | sdkmanager --licenses
+    - name: Install Buildozer and Cython
+      run: |
+        python -m pip install --upgrade pip
+        pip install buildozer
+        pip install cython==0.29.33
 
-          # Install required Android SDK components
-          sdkmanager "platform-tools" "build-tools;30.0.3" "platforms;android-29" "system-images;android-29;google_apis;x86_64"
+    - name: Install and configure Android SDK & NDK
+      run: |
+        sudo apt-get install -y wget unzip
+        wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip
+        sudo mkdir -p /usr/local/android-sdk/cmdline-tools
+        sudo unzip commandlinetools-linux-8512546_latest.zip
+        sudo mv cmdline-tools /usr/local/android-sdk/cmdline-tools/latest
+        export ANDROID_HOME=/usr/local/android-sdk
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        yes | sdkmanager --licenses
+        sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;23.1.7779620"
 
-          # Install Cython
-          pip install cython
+    - name: Create directory structure
+      run: |
+        mkdir -p data/images
+        mkdir -p data/audio
+        mkdir -p data/audiofx
+        mkdir -p config
 
-          # Upgrade pip and install buildozer
-          pip install --upgrade pip
-          pip install buildozer
+    - name: Verify icon.jpg exists
+      run: |
+        if [ ! -f "icon.jpg" ]; then
+          echo "Warning: icon.jpg not found in root directory"
+          exit 1
+        fi
 
-      - name: Build APK with Buildozer
-        run: |
-          buildozer android debug
+    - name: Build with Buildozer
+      run: |
+        export ANDROID_HOME=/usr/local/android-sdk
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        buildozer android debug
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v3  # Latest version of upload-artifact action
-        with:
-          name: my-apk
-          path: bin/*.apk
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: bin/*.apk
+
+    - name: Upload Build Logs
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-logs
+        path: |
+          .buildozer/android/build/*/buildozer.log
+          .buildozer/android/platform/*/build/build.log
+
+  # Optional: Create Release if tagged
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: bin/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
