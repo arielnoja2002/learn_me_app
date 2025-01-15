@@ -39,7 +39,7 @@ jobs:
           zlib1g-dev \
           libncurses5-dev \
           libncursesw5-dev \
-          libtinfo5 \
+          libtinfo6 \  # Change from libtinfo5 to libtinfo6
           cmake \
           wget \
           unzip \
@@ -92,7 +92,14 @@ jobs:
     - name: Update Buildozer configuration
       run: |
         cat > buildozer.spec << EOF
-
+        [app]
+        title = MyApp
+        package.name = myapp
+        package.domain = org.example
+        source.include_exts = py,png,jpg,kv,atlas
+        version = 0.1
+        android.permissions = INTERNET
+        EOF
 
     - name: Clean Buildozer
       run: |
@@ -101,8 +108,9 @@ jobs:
 
     - name: Build Android APK
       run: |
+        set -e  # Exit on error
         export PATH=$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/33.0.0:$PATH
-        buildozer android debug
+        buildozer android debug || { echo 'Build failed'; exit 1; }
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v3
