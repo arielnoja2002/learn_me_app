@@ -46,11 +46,19 @@ jobs:
             android-tools-adb \
             android-tools-fastboot
 
-      # Step 4: Install Buildozer and Cython
-      - name: Install Buildozer and Cython
+      # Step 4: Install Buildozer, Cython, and update Android SDK
+      - name: Install Buildozer, Cython, and update Android SDK
         run: |
           pip install buildozer
           pip install cython
+          
+          # Install Android SDK command line tools if not already installed
+          mkdir -p $HOME/Android/Sdk
+          cd $HOME/Android/Sdk
+          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip
+          unzip commandlinetools-linux-7583922_latest.zip
+          yes | $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk --licenses
+          $HOME/Android/Sdk/cmdline-tools/bin/sdkmanager --sdk_root=$HOME/Android/Sdk "platform-tools" "build-tools;29.0.2" "platforms;android-29" "system-images;android-29;google_apis;x86_64" "tools" "aidl"
 
       # Step 5: Build APK with Buildozer
       - name: Build APK
