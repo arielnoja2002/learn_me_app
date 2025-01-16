@@ -8,32 +8,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Clean previous build
-      - name: Clean previous build
-        run: |
-          rm -rf ~/.buildozer
-
-      # Install Android SDK
+      # Install Android SDK command-line tools
       - name: Install Android SDK
         run: |
-          mkdir -p $HOME/.buildozer/android/platform/android-sdk
-          cd $HOME/.buildozer/android/platform/android-sdk
-          wget https://dl.google.com/android/repository/commandlinetools-linux-7302050_latest.zip
-          unzip commandlinetools-linux-7302050_latest.zip
-          rm commandlinetools-linux-7302050_latest.zip
-          yes | ./cmdline-tools/bin/sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk --licenses
-          sdkmanager --sdk_root=$HOME/.buildozer/android/platform/android-sdk "platform-tools" "platforms;android-30" "build-tools;30.0.3"
-          
-      # Build APK
+          # Install required packages
+          sudo apt-get update
+          sudo apt-get install -y wget unzip openjdk-11-jdk
+
+          # Download Android command-line tools
+          mkdir -p $HOME/.buildozer/android
+          cd $HOME/.buildozer/android
+
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+
+          # Unzip and remove zip file
+          unzip commandlinetools-linux-9477386_latest.zip
+          rm commandlinetools-linux-9477386_latest.zip
+
+          # Install SDK components and accept licenses
+          yes | $HOME/.buildozer/android/cmdline-tools/bin/sdkmanager --licenses
+          $HOME/.buildozer/android/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+
+      # Build APK with Buildozer
       - name: Build APK
         uses: digreatbrian/buildozer-action@v2
         with:
           python-version: 3.8
           buildozer-cmd: buildozer -v android debug
 
-      # Upload artifacts
-      - name: Upload artifacts
+      # Upload APK as an artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: package
+          name: apk
           path: ./bin/*.apk
