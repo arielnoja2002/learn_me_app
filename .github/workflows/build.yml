@@ -16,7 +16,7 @@ jobs:
           sudo apt-get install -y wget unzip openjdk-11-jdk
 
           # Download Android command-line tools
-          mkdir -p $HOME/.buildozer/android
+          mkdir -p $HOME/.buildozer/android/cmdline-tools
           cd $HOME/.buildozer/android
 
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
@@ -25,9 +25,12 @@ jobs:
           unzip commandlinetools-linux-9477386_latest.zip
           rm commandlinetools-linux-9477386_latest.zip
 
+          # Move cmdline-tools to the latest directory
+          mv cmdline-tools $HOME/.buildozer/android/cmdline-tools/latest
+
           # Install SDK components and accept licenses
-          yes | $HOME/.buildozer/android/cmdline-tools/bin/sdkmanager --licenses
-          $HOME/.buildozer/android/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
+          yes | $HOME/.buildozer/android/cmdline-tools/latest/bin/sdkmanager --licenses
+          $HOME/.buildozer/android/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
 
       # Build APK with Buildozer
       - name: Build APK
